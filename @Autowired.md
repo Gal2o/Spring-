@@ -118,5 +118,5 @@
   ----------
   - ### @Primary, @Qualifier 등이 어떻게 동작하는 것 일까?
     - #### `BeanPostProccessor`에 의해 동작된다.
-    - #### `Bean의 인스턴스를 만든 다음`에 `Bean의 initialization 라이프 사이클 이후`, `부가적인 작업을 할 수 있는 라이프사이클`이 있는데 <br><br> 그것이 `BeanPostProccessor` interface이다.
+    - #### `Bean의 인스턴스를 만든 다음`에 `Bean의 initialization 라이프 사이클 이후`, <br><br> `부가적인 작업을 할 수 있는 라이프 사이클`이 있는데 <br><br> 그것이 `BeanPostProccessor` interface이다.
     - #### `BeanPostProccessor`은 `새로 만든 Bean을 수정할 수 있는 라이프 사이클이다.`
