@@ -82,51 +82,50 @@
       com.example.demospring51.Proto@29d37757
     ```
     - #### 🔼Proto의 인스턴스 값은 계속 바뀌지만, Single을 통해 받은 Proto 인스턴스는 업데이트가 되지 않아 계속 동일하다.
-    -----------
-    - #### Proto의 인스턴스를 업데이트 시켜주려면?
-      - #### 1️⃣ Scoped-Proxy
-        ``` java
-          @Component
-          @Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
-          public class Proto {
-          }
-        ```
-        - #### CGlib을 이용한 프록시를 사용하여 인스턴스를 업데이트 할 수 있다. <br><br> <img src="https://user-images.githubusercontent.com/35948339/139299260-90ca8ec8-7d39-48a0-bcfd-2c3e690cfeb7.png" width=400>
-          - #### 1️⃣`Proxy 인스턴스는 Proto를 상속받기 때문에 같은 인스턴스 값`을 가진다.
-          - #### 2️⃣ `Proxy 인스턴스를 Bean으로 만든다.`
-          - #### 3️⃣ `Single에서는 이 Proxy 인스턴스를 주입 받아 업데이트`가 가능해진다.
-      ------------
-      - #### 2️⃣ Object-Provider, 3️⃣ `Provider (표준)`
-        ``` java
-          @Component
-          public class Single {
+  -------------
+  - ### Proto의 인스턴스를 업데이트 시켜주려면?
+    - #### 1️⃣ Scoped-Proxy
+      ``` java
+        @Component
+        @Scope(value = "prototype", proxyMode = ScopedProxyMode.TARGET_CLASS)
+        public class Proto {
+        }
+      ```
+      - #### CGlib을 이용한 프록시를 사용하여 인스턴스를 업데이트 할 수 있다. <br><br> <img src="https://user-images.githubusercontent.com/35948339/139299260-90ca8ec8-7d39-48a0-bcfd-2c3e690cfeb7.png" width=400>
+        - #### 1️⃣`Proxy 인스턴스는 Proto를 상속받기 때문에 같은 인스턴스 값`을 가진다.
+        - #### 2️⃣ `Proxy 인스턴스를 Bean으로 만든다.`
+        - #### 3️⃣ `Single에서는 이 Proxy 인스턴스를 주입 받아 업데이트`가 가능해진다.
+    ------------
+    - #### 2️⃣ Object-Provider, 3️⃣ `Provider (표준)`
+      ``` java
+        @Component
+        public class Single {
 
-              @Autowired
-              private ObjectProvider<Proto> proto;
+            @Autowired
+            private ObjectProvider<Proto> proto;
 
-              public Proto getProto() {
-                  return proto.getIfAvailable();
-              }
-          }
-        ```
-        ```
-          Proto
-          com.example.demospring51.Proto@32fdec40
-          com.example.demospring51.Proto@6813a331
-          com.example.demospring51.Proto@1bd81830
-          
-          Single
-          com.example.demospring51.Single@39ab59f8
-          com.example.demospring51.Single@39ab59f8
-          com.example.demospring51.Single@39ab59f8
-          
-          Proto -> Single
-          com.example.demospring51.Proto@29d37757
-          com.example.demospring51.Proto@25cc7470
-          com.example.demospring51.Proto@79b663b3
-        ```
-        - #### Single에서 ObjectProvider 또는 Provider를 사용하여 업데이트를 할 수 있다.
-        ----------
+            public Proto getProto() {
+                return proto.getIfAvailable();
+            }
+        }
+      ```
+      ```
+        Proto
+        com.example.demospring51.Proto@32fdec40
+        com.example.demospring51.Proto@6813a331
+        com.example.demospring51.Proto@1bd81830
+
+        Single
+        com.example.demospring51.Single@39ab59f8
+        com.example.demospring51.Single@39ab59f8
+        com.example.demospring51.Single@39ab59f8
+
+        Proto -> Single
+        com.example.demospring51.Proto@29d37757
+        com.example.demospring51.Proto@25cc7470
+        com.example.demospring51.Proto@79b663b3
+      ```
+      - #### Single에서 ObjectProvider 또는 Provider를 사용하여 업데이트를 할 수 있다.
 -----------
 - ## 싱글톤 객체 사용시 주의할 점
   - #### 실제로 싱글톤 이외의 Scope를 쓸 경우가 거의 없다. 하지만 저런 상황이 발생 한다면, <br><br>  `생명 주기가 긴 Scope (싱글톤)` ➡ `짧은 주기의 Scope (프로토타입) Bean`을 주입 받을 때 <br><br> `업데이트에 유의하자 ‼`
