@@ -57,7 +57,7 @@
           }
       }
     ```
-    - #### 등록되어 있는 @Bean 중에서 이벤트를 받는다.
+    - #### `ApplicationListener`를 통해 등록되어 있는 @Bean 중에서 이벤트를 받는다.
     ```
       이벤트 받음 ! 데이터는 100
     ```
@@ -86,6 +86,8 @@
             }
         }
       ```
+      - #### 변경 후, MyEvent는 Spring 패키지를 전혀 사용하지 않는 좋은 POJO 구조가 된다.
+      ---------
       - #### AppRunner.java
       ``` java
         @Component
@@ -100,6 +102,7 @@
             }
         }
       ```
+      -----------
       - #### MyEventHandler.java
       ``` java
         @Component
@@ -115,6 +118,9 @@
       ```
         이벤트 받음 ! 데이터는 100
       ```
+      - #### `ApplicationListener`없이 `@EventListener`를 통해 사용 가능하다.
+      - #### 이 또한, Spring 패키지 없이 구현이 가능하다 (`Spring의 비침투성`)
+      - #### POJO 구조를 통해 `코드가 깔끔하고, 테스트가 유연하며 유지보수가 쉬워진다.`
     ------------
     - ### 여러 이벤트 핸들러 중에서 우선순위 만들어주기
       - #### MultiThread 이므로, 어떤 Handler가 먼저 출력 될지 모른다.
@@ -216,19 +222,24 @@
             }
         }
       ```
-      - #### ContextRefreshedEvent : ApplicationContext를 `초기화 or Refresh` 했을 때 발생
-      - #### ContextStartedEvent : ApplicationContext를 start() 하여 `라이프사이클 Bean들이 시작 신호`를 받은 시점에 발생
-      - #### ContextStoppedEvent : ApplicationContext를 stop() 하여 `라이프사이클 Bean들이 정지 신호`를 받은 시점에 발생
-      - #### ContextClosedEvent : ApplicationContext를 close() 하여 싱글톤 `Bean 소멸 되는 시점`에 발생
-      - #### RequestHandledEvent : HTTP 요청을 처리 했을 때 발생
       ```
         Thread[task-1,5,main]
         ContextRefreshedEvent
+        
         Thread[task-3,5,main]
         이벤트 받음 ! 데이터는 100
+        
         Thread[task-2,5,main]
         Another 100
+        
         // 서비스를 종료하면 출력된다.
         Thread[task-4,5,main]
         ContextClosedEvent
       ```
+      |메소드|기능|
+      |:-----:|:----:|
+      | ContextRefreshedEvent | ApplicationContext를 `초기화 or Refresh` 했을 때 발생 |
+      | ContextStartedEvent | ApplicationContext를 start() 하여 `라이프사이클 Bean들이 시작 신호`를 받은 시점에 발생 |
+      | ContextStoppedEvent | ApplicationContext를 stop() 하여 `라이프사이클 Bean들이 정지 신호`를 받은 시점에 발생 |
+      | ContextClosedEvent | ApplicationContext를 close() 하여 싱글톤 `Bean 소멸 되는 시점`에 발생 |
+      | RequestHandledEvent | HTTP 요청을 처리 했을 때 발생
