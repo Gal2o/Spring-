@@ -189,4 +189,46 @@
           이벤트 받음 ! 데이터는 100
         ```
     ------------
-    - 
+    - ### Spring이 제공하는 기본 이벤트 사용해보기
+      ``` java
+        @Component
+        public class MyEventHandler {
+
+            @EventListener
+            @Async
+            public void handle(MyEvent event) {
+                System.out.println(Thread.currentThread().toString());
+                System.out.println("이벤트 받음 ! 데이터는 " + event.getData());
+            }
+
+            @EventListener
+            @Async
+            public void handle(ContextRefreshedEvent event) {
+                System.out.println(Thread.currentThread().toString());
+                System.out.println("ContextRefreshedEvent");
+            }
+
+            @EventListener
+            @Async
+            public void handle(ContextClosedEvent event) {
+                System.out.println(Thread.currentThread().toString());
+                System.out.println("ContextClosedEvent");
+            }
+        }
+      ```
+      - #### ContextRefreshedEvent : ApplicationContext를 `초기화 or Refresh` 했을 때 발생
+      - #### ContextStartedEvent : ApplicationContext를 start() 하여 `라이프사이클 Bean들이 시작 신호`를 받은 시점에 발생
+      - #### ContextStoppedEvent : ApplicationContext를 stop() 하여 `라이프사이클 Bean들이 정지 신호`를 받은 시점에 발생
+      - #### ContextClosedEvent : ApplicationContext를 close() 하여 싱글톤 `Bean 소멸 되는 시점`에 발생
+      - #### RequestHandledEvent : HTTP 요청을 처리 했을 때 발생
+      ```
+        Thread[task-1,5,main]
+        ContextRefreshedEvent
+        Thread[task-3,5,main]
+        이벤트 받음 ! 데이터는 100
+        Thread[task-2,5,main]
+        Another 100
+        // 서비스를 종료하면 출력된다.
+        Thread[task-4,5,main]
+        ContextClosedEvent
+      ```
