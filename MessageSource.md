@@ -67,7 +67,7 @@
     }
   ```
   - #### `ReloadableResourceBundleMessageSource` 클래스를 이용하여 Reload가 가능한 MessageSouce 인스턴스를 만든다.
-  - #### Build 되어 있는 `target 폴더 안에 properties를 읽어 오는 것`이기 때문에, `내용을 수정하려면 Build를 해야 적용`이 된다.
+  - #### Build 되어 있는 `target/classpath:properties`를 읽어 오기 때문에, `내용을 수정하고 싶으면 Build`를 다시 해야 적용이 된다.
   ```
     Hello, min
     Hello, min
